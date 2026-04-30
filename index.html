@@ -196,21 +196,49 @@
     color: var(--text);
   }
 
-  /* ── Jobs ── */
-  .job {
+  /* ── PO badge ── */
+  .po-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    border: 1px solid #b3d5c4;
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+
+  .po-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── PO Jobs (destacado) ── */
+  .job-po {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 0 20px;
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--border);
+    padding: 1.75rem;
+    margin-bottom: 16px;
+    background: var(--surface);
+    border: 1px solid #c8c4bc;
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
     position: relative;
   }
 
-  .job:last-child { border-bottom: none; }
-
   .job-role {
     font-family: var(--serif);
-    font-size: 19px;
+    font-size: 20px;
     font-weight: 400;
     line-height: 1.2;
     margin-bottom: 2px;
@@ -271,6 +299,49 @@
     font-size: 13px;
     color: #1e4433;
     line-height: 1.65;
+  }
+
+  /* ── Outras experiências (discreta) ── */
+  .other-exp-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 2rem 0 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .other-exp-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Jobs secundários ── */
+  .job-secondary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 20px;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--border);
+    opacity: 0.75;
+  }
+
+  .job-secondary:last-child { border-bottom: none; }
+
+  .job-secondary .job-role {
+    font-family: var(--serif);
+    font-size: 16px;
+  }
+
+  .job-secondary .job-desc {
+    font-size: 13px;
   }
 
   /* ── Competências ── */
@@ -443,15 +514,17 @@
         <h2>Experiência Profissional</h2>
       </div>
 
-      <!-- Vsoft -->
-      <div class="job">
+      <div class="po-badge">Product Owner · 4+ anos de experiência</div>
+
+      <!-- Vsoft PO -->
+      <div class="job-po">
         <div>
           <p class="job-role">Product Owner</p>
           <p class="job-company">Vsoft Tecnologia</p>
         </div>
-        <div class="job-period">out/2024 — fev/2026<br><span style="font-size:11px; color:var(--muted);">João Pessoa, PB</span></div>
+        <div class="job-period">out/2024 — fev/2026<br><span style="font-size:11px; color:var(--muted);">João Pessoa, PB · 1a 5m</span></div>
         <p class="job-desc">
-          Atuei em produto B2B voltado à auditoria e detecção de fraudes em processos regulatórios no setor público, utilizando IA para aumentar a eficiência operacional e mitigar riscos. Conduzi visão e roadmap do produto, priorizei funcionalidades de automação e detecção de padrões, e estruturei indicadores operacionais para guiar a evolução do produto.
+          Produto B2B de auditoria e detecção de fraudes em processos regulatórios no setor público, utilizando IA para aumentar a eficiência operacional e mitigar riscos. Conduzi visão e roadmap do produto, priorizei funcionalidades de automação e detecção de padrões, e estruturei indicadores operacionais para guiar a evolução do produto.
         </p>
         <div class="job-tags">
           <span class="tag tag-accent">Detecção de Fraudes</span>
@@ -463,15 +536,15 @@
         </div>
       </div>
 
-      <!-- Segware -->
-      <div class="job">
+      <!-- Segware PO -->
+      <div class="job-po">
         <div>
           <p class="job-role">Product Owner</p>
           <p class="job-company">Segware</p>
         </div>
-        <div class="job-period">ago/2022 — out/2024<br><span style="font-size:11px; color:var(--muted);">Campinas, SP</span></div>
+        <div class="job-period">ago/2022 — out/2024<br><span style="font-size:11px; color:var(--muted);">Campinas, SP · 2a 3m</span></div>
         <p class="job-desc">
-          Produtos digitais B2B voltados a monitoramento, análise de dados e automação — VMS, plataformas de Analytics (BI) e Machine Learning (IA preditiva). Conduzi priorização de soluções de BI, direcionei melhorias baseadas em dados e acompanhei métricas de produto para apoiar decisões estratégicas.
+          Produtos digitais B2B de monitoramento, análise de dados e automação — VMS, plataformas de Analytics (BI) e Machine Learning (IA preditiva). Conduzi priorização de soluções de BI, direcionei melhorias baseadas em dados e acompanhei métricas de produto para apoiar decisões estratégicas.
         </p>
         <div class="job-tags">
           <span class="tag tag-accent">BI & Analytics</span>
@@ -483,17 +556,17 @@
         </div>
         <div class="case-box">
           <p class="case-label">✦ Destaque</p>
-          <p>Evolução de plataforma de Analytics que ampliou capacidade de geração de insights para clientes, reduzindo atividades manuais e aumentando a eficiência dos processos operacionais com automações baseadas em dados.</p>
+          <p>Evolução de plataforma de Analytics que ampliou a capacidade de geração de insights para clientes, reduzindo atividades manuais e aumentando a eficiência dos processos operacionais com automações baseadas em dados.</p>
         </div>
       </div>
 
       <!-- Inforgeneses PO -->
-      <div class="job">
+      <div class="job-po">
         <div>
           <p class="job-role">Product Owner</p>
           <p class="job-company">Inforgeneses</p>
         </div>
-        <div class="job-period">jan/2021 — fev/2022<br><span style="font-size:11px; color:var(--muted);">São Luís, MA</span></div>
+        <div class="job-period">jan/2021 — fev/2022<br><span style="font-size:11px; color:var(--muted);">São Luís, MA · 1a 2m</span></div>
         <p class="job-desc">
           Sistema de gestão educacional B2B/B2C. Organizei e priorizei backlog com critérios claros, estruturei user stories com BDD, conduzi testes funcionais, regressivos e de estresse. Atuei como ponto focal entre usuários e desenvolvimento, traduzindo necessidades reais em requisitos estruturados.
         </p>
@@ -506,8 +579,11 @@
         </div>
       </div>
 
+      <!-- Outras experiências -->
+      <p class="other-exp-label">Outras experiências</p>
+
       <!-- Inforgeneses Coord -->
-      <div class="job">
+      <div class="job-secondary">
         <div>
           <p class="job-role">Coordenador de Suporte Técnico</p>
           <p class="job-company">Inforgeneses</p>
@@ -516,15 +592,10 @@
         <p class="job-desc">
           Liderança do time de suporte, organização do fluxo de atendimento, capacitação da equipe e ponte entre suporte e desenvolvimento para levar insights de usuários ao produto.
         </p>
-        <div class="job-tags">
-          <span class="tag">Liderança</span>
-          <span class="tag">Suporte Técnico</span>
-          <span class="tag">Treinamento</span>
-        </div>
       </div>
 
       <!-- Inforgeneses Analista -->
-      <div class="job">
+      <div class="job-secondary">
         <div>
           <p class="job-role">Analista de Suporte</p>
           <p class="job-company">Inforgeneses</p>
@@ -533,11 +604,6 @@
         <p class="job-desc">
           Implantação, configuração e suporte de sistemas de gestão nos segmentos de saúde, educação e financeiro. Onboarding de clientes, resolução de incidentes e documentação técnica.
         </p>
-        <div class="job-tags">
-          <span class="tag">Implantação</span>
-          <span class="tag">Onboarding</span>
-          <span class="tag">Documentação</span>
-        </div>
       </div>
 
     </div>
