@@ -59,18 +59,20 @@
   }
 
   .avatar {
-    width: 52px;
-    height: 52px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
-    background: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--serif);
-    font-size: 18px;
-    color: #fff;
-    letter-spacing: .5px;
+    overflow: hidden;
     flex-shrink: 0;
+    border: 2px solid var(--border);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
   }
 
   .name-block h1 {
@@ -415,7 +417,9 @@
 
   <!-- ── Sidebar ── -->
   <aside>
-    <div class="avatar">FO</div>
+    <div class="avatar">
+      <img src="1687265869106.jpg" alt="Fábio Oliveira">
+    </div>
 
     <div class="name-block">
       <h1>Fábio Oliveira</h1>
