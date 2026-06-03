@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fábio Oliveira — Product Owner & Product Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #05080f;
+    --bg2:       #080d18;
+    --bg3:       #0c1220;
+    --border:    #162035;
+    --border2:   #1e304d;
+    --blue:      #4a9eff;
+    --blue-dim:  #0e2a55;
+    --blue-glow: rgba(74,158,255,0.15);
+    --cyan:      #22d3ee;
+    --ice:       #a5d8ff;
+    --violet:    #818cf8;
+    --text:      #8fafc8;
+    --text-dim:  #3d5470;
+    --text-bright:#daeeff;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display:'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* scanlines */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,8,30,0.06) 2px,rgba(0,8,30,0.06) 4px);
+    pointer-events:none;
+    z-index:9999;
+  }
+
+  /* subtle grid bg */
+  body::after {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(74,158,255,0.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(74,158,255,0.025) 1px,transparent 1px);
+    background-size:60px 60px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; width:100%; z-index:100;
+    background:rgba(5,8,15,0.88);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    padding:0 5%;
+    display:flex; align-items:center; justify-content:space-between;
+    height:60px;
+  }
+  .nav-logo { font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--blue); text-decoration:none; letter-spacing:0.05em; }
+  .nav-logo span { color:var(--text-dim); }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { color:var(--text-dim); text-decoration:none; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  .nav-links a::before { content:'//'; color:var(--blue); margin-right:4px; opacity:0; transition:opacity 0.2s; }
+  .nav-links a:hover { color:var(--text-bright); }
+  .nav-links a:hover::before { opacity:1; }
+  .status-dot { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--text-dim); letter-spacing:0.08em; }
+  .status-dot::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--blue); box-shadow:0 0 8px var(--blue); animation:pulse 2.2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ── HERO ── */
+  #hero {
+    position:relative; z-index:1;
+    min-height:100vh;
+    display:grid; grid-template-columns:1fr 1fr;
+    align-items:center; gap:4rem;
+    padding:100px 5% 60px;
+    max-width:1200px; margin:0 auto;
+  }
+  .hero-left { display:flex; flex-direction:column; gap:1.5rem; }
+  .hero-tag { font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue); display:flex; align-items:center; gap:8px; }
+  .hero-tag::before { content:''; width:24px; height:1px; background:var(--blue); }
+  .hero-greeting { font-size:16px; color:var(--text-dim); }
+  .hero-name { font-family:var(--font-display); font-size:clamp(2.8rem,5.5vw,4.8rem); font-weight:800; color:var(--text-bright); line-height:1; letter-spacing:-0.02em; }
+  .hero-name span { color:var(--blue); }
+  .hero-role { font-size:15px; color:var(--cyan); letter-spacing:0.05em; }
+  .hero-desc { font-size:13px; color:var(--text); line-height:1.9; max-width:480px; }
+  .hero-stack { display:flex; flex-wrap:wrap; gap:8px; margin-top:.5rem; }
+  .badge { font-size:11px; padding:3px 10px; border:1px solid var(--border2); border-radius:3px; color:var(--text-dim); letter-spacing:0.08em; background:var(--bg2); transition:all 0.2s; }
+  .badge:hover { border-color:var(--blue-dim); color:var(--blue); }
+  .hero-cta { display:flex; gap:12px; margin-top:.5rem; }
+  .btn { font-family:var(--font-mono); font-size:12px; padding:10px 22px; cursor:pointer; text-decoration:none; letter-spacing:0.08em; border-radius:3px; transition:all 0.2s; }
+  .btn-primary { background:var(--blue); color:#05080f; border:1px solid var(--blue); font-weight:700; }
+  .btn-primary:hover { background:transparent; color:var(--blue); }
+  .btn-secondary { background:transparent; color:var(--text-dim); border:1px solid var(--border2); }
+  .btn-secondary:hover { border-color:var(--text-dim); color:var(--text-bright); }
+  .hero-social { display:flex; gap:16px; margin-top:.25rem; }
+  .hero-social a { color:var(--text-dim); text-decoration:none; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; display:flex; align-items:center; gap:5px; }
+  .hero-social a:hover { color:var(--blue); }
+  .hero-social a::before { content:'↗'; font-size:10px; }
+
+  /* ── TERMINAL ── */
+  .terminal { background:var(--bg2); border:1px solid var(--border2); border-radius:8px; overflow:hidden; font-size:13px; box-shadow:0 0 40px rgba(74,158,255,0.06); }
+  .terminal-bar { background:var(--bg3); padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+  .dot { width:11px; height:11px; border-radius:50%; }
+  .dot-r{background:#ff5f57} .dot-y{background:#febc2e} .dot-g{background:#28c840}
+  .terminal-title { flex:1; text-align:center; font-size:11px; color:var(--text-dim); letter-spacing:0.06em; }
+  .terminal-body { padding:20px 20px 24px; line-height:2.1; }
+  .t-prompt{color:var(--blue)}
+  .t-cmd{color:var(--text-bright)}
+  .t-out{color:var(--text); padding-left:16px}
+  .t-key{color:var(--cyan)}
+  .t-val{color:var(--ice)}
+  .t-comment{color:var(--text-dim)}
+  .t-arrow{color:var(--blue); margin-right:6px}
+  .t-cursor { display:inline-block; width:8px; height:14px; background:var(--blue); animation:blink 1s step-end infinite; vertical-align:middle; margin-left:2px; }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+  /* ── LAYOUT ── */
+  section { max-width:1100px; margin:0 auto; padding:80px 5%; position:relative; z-index:1; }
+  .section-header { display:flex; align-items:center; gap:16px; margin-bottom:3rem; }
+  .section-label { font-size:11px; text-transform:uppercase; letter-spacing:0.2em; color:var(--blue); }
+  .section-title { font-family:var(--font-display); font-size:clamp(1.8rem,3vw,2.4rem); font-weight:800; color:var(--text-bright); }
+  .section-line { flex:1; height:1px; background:var(--border); }
+
+  /* ── TIMELINE ── */
+  .timeline { display:flex; flex-direction:column; }
+
+  .timeline-item { display:grid; grid-template-columns:150px 24px 1fr; gap:0 20px; padding-bottom:0; }
+
+  .t-date { font-size:11px; color:var(--text-dim); letter-spacing:0.05em; padding-top:16px; text-align:right; line-height:1.7; }
+  .t-duration { display:block; color:var(--blue); font-size:10px; margin-top:2px; }
+
+  .t-line { display:flex; flex-direction:column; align-items:center; }
+  .t-dot { width:10px; height:10px; border:2px solid var(--blue); border-radius:50%; background:var(--bg); flex-shrink:0; margin-top:18px; z-index:1; box-shadow:0 0 8px rgba(74,158,255,0.4); }
+  .t-track { width:1px; flex:1; background:var(--border); margin-top:4px; min-height:40px; }
+  .timeline-item:last-child .t-track { display:none; }
+
+  /* card */
+  .t-card {
+    margin: 10px 0 24px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .t-card:hover { border-color: var(--border2); }
+
+  .t-card-head {
+    padding: 18px 20px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .t-card-head:hover .t-expand-btn { border-color: var(--blue); color: var(--blue); }
+
+  .t-head-left { display: flex; flex-direction: column; gap: 4px; }
+  .t-role { font-size:15px; font-weight:700; color:var(--text-bright); }
+  .t-org { font-size:12px; color:var(--cyan); letter-spacing:0.05em; }
+
+  .t-summary {
+    font-size:12px; color:var(--text); line-height:1.8;
+    padding: 0 20px 14px;
+  }
+
+  .t-expand-btn {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 4px 10px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .t-expand-btn .arrow { transition: transform 0.25s; display: inline-block; }
+  .t-expand-btn.open .arrow { transform: rotate(180deg); }
+
+  .t-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+    opacity: 0;
+  }
+  .t-details.open {
+    max-height: 600px;
+    opacity: 1;
+  }
+  .t-details-inner {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .t-results { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+  .t-result { font-size:12px; color:var(--text); display:flex; gap:10px; line-height:1.7; }
+  .t-result::before { content:'▶'; color:var(--blue); flex-shrink:0; font-size:10px; margin-top:3px; }
+
+  .t-tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .t-tag { font-size:10px; padding:2px 8px; border:1px solid var(--blue-dim); border-radius:2px; color:var(--blue); letter-spacing:0.06em; }
+
+  /* ── SKILLS ── */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .skill-card { background:var(--bg2); padding:24px 28px; }
+  .skill-card-title { font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); margin-bottom:16px; }
+  .skill-list { display:flex; flex-direction:column; gap:8px; }
+  .skill-item { font-size:12px; color:var(--text); display:flex; align-items:flex-start; gap:8px; }
+  .skill-item::before { content:'→'; color:var(--cyan); flex-shrink:0; }
+  .tools-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .tool-badge { font-size:11px; padding:4px 12px; border:1px solid var(--border2); border-radius:3px; color:var(--text-dim); background:var(--bg); letter-spacing:0.06em; transition:all 0.2s; }
+  .tool-badge:hover { border-color:var(--blue-dim); color:var(--blue); }
+
+  /* ── CERTS ── */
+  .certs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:10px; }
+  .cert-card { background:var(--bg2); border:1px solid var(--border); border-left:2px solid var(--blue-dim); border-radius:6px; padding:14px 18px; }
+  .cert-name { font-size:12px; color:var(--text-bright); line-height:1.4; }
+  .cert-issuer { font-size:11px; color:var(--text-dim); margin-top:3px; }
+
+  /* ── PROJECTS ── */
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .project-card { background:var(--bg2); padding:28px; display:flex; flex-direction:column; gap:12px; transition:background 0.2s; }
+  .project-card:hover { background:var(--bg3); }
+  .project-type { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-dim); }
+  .project-company { font-size:11px; color:var(--cyan); letter-spacing:0.05em; }
+  .project-name { font-family:var(--font-display); font-size:1.1rem; font-weight:700; color:var(--text-bright); line-height:1.3; }
+  .project-desc { font-size:12px; color:var(--text); line-height:1.85; flex:1; }
+  .project-metric { font-size:12px; color:var(--blue); margin-top:2px; letter-spacing:0.02em; }
+  .project-stack { display:flex; flex-wrap:wrap; gap:6px; }
+  .p-tag { font-size:10px; padding:2px 7px; background:var(--bg); border:1px solid var(--border2); border-radius:2px; color:var(--text-dim); }
+
+  /* ── CONTACT ── */
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+  .contact-info { display:flex; flex-direction:column; gap:1.5rem; }
+  .contact-line { font-size:13px; color:var(--text-dim); line-height:1.9; }
+  .contact-links { display:flex; flex-direction:column; gap:10px; }
+  .contact-link { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text-dim); font-size:12px; letter-spacing:0.05em; transition:all 0.2s; padding:10px 14px; border:1px solid var(--border); border-radius:5px; background:var(--bg2); }
+  .contact-link:hover { color:var(--blue); border-color:var(--blue-dim); background:var(--bg3); }
+  .contact-link span { opacity:0.4; }
+  .contact-form { display:flex; flex-direction:column; gap:12px; }
+  .form-group { display:flex; flex-direction:column; gap:5px; }
+  .form-label { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-dim); }
+  .form-input,.form-textarea { font-family:var(--font-mono); font-size:13px; background:var(--bg2); border:1px solid var(--border); border-radius:3px; color:var(--text-bright); padding:10px 14px; outline:none; transition:border-color 0.2s; resize:none; }
+  .form-input:focus,.form-textarea:focus { border-color:var(--blue-dim); box-shadow:0 0 0 3px rgba(74,158,255,0.07); }
+  .form-textarea { min-height:110px; }
+  .form-submit { font-family:var(--font-mono); font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:var(--blue); color:#05080f; border:none; border-radius:3px; padding:12px 24px; cursor:pointer; transition:all 0.2s; align-self:flex-start; }
+  .form-submit:hover { background:var(--cyan); }
+
+  /* ── FOOTER ── */
+  footer { border-top:1px solid var(--border); padding:28px 5%; display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--text-dim); letter-spacing:0.06em; position:relative; z-index:1; }
+  footer a { color:var(--text-dim); text-decoration:none; }
+  footer a:hover { color:var(--blue); }
+
+  .section-divider { width:100%; height:1px; background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent); position:relative; z-index:1; }
+
+  @media(max-width:768px){
+    #hero{grid-template-columns:1fr; padding-top:90px;}
+    .hero-right{display:none;}
+    .timeline-item{grid-template-columns:0 24px 1fr;}
+    .t-date{display:none;}
+    .contact-grid{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+    .status-dot{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">sys.<span>fabio</span>_</a>
+  <ul class="nav-links">
+    <li><a href="#experience">Jornada</a></li>
+    <li><a href="#skills">Habilidades</a></li>
+    <li><a href="#projects">Produtos</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+  <div class="status-dot">DISPONÍVEL</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Product Owner · Product Manager</div>
+    <p class="hero-greeting">Olá, eu sou</p>
+    <h1 class="hero-name">Fábio<br><span>Oliveira</span></h1>
+    <p class="hero-role">Transformando dados e tecnologia em produtos de impacto</p>
+    <p class="hero-desc">
+      PO com sólida experiência em produtos digitais B2B e B2B2C de alta complexidade.
+      Do discovery ao lançamento do MVP — com foco em valor real, métricas e times de alta performance.
+    </p>
+    <div class="hero-stack">
+      <span class="badge">Agile / Scrum</span>
+      <span class="badge">Product Discovery</span>
+      <span class="badge">Roadmap</span>
+      <span class="badge">KPIs & Métricas</span>
+      <span class="badge">LLM / IA</span>
+      <span class="badge">SQL</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Entrar em contato</a>
+      <a href="#experience" class="btn btn-secondary">Ver jornada</a>
+    </div>
+    <div class="hero-social">
+      <a href="https://linkedin.com/in/f4bio-oliveira/" target="_blank">LinkedIn</a>
+      <a href="mailto:fabio981962058@gmail.com">E-mail</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">bash — sys.fabio</span>
+      </div>
+      <div class="terminal-body">
+        <p><span class="t-prompt">➜</span> <span class="t-comment">~</span> <span class="t-cmd">whoami</span></p>
+        <p class="t-out"><span class="t-val">"PO apaixonado por produtos de impacto real."</span></p>
+        <br>
+        <p><span class="t-prompt">➜</span> <span class="t-comment">~</span> <span class="t-cmd">cat experiencia.json</span></p>
+        <p class="t-out"><span class="t-key">"anos_como_po"</span>: <span class="t-val">"+5 anos"</span></p>
+        <p class="t-out"><span class="t-key">"produtos"</span>: <span class="t-val">["B2B", "B2B2C", "GovTech"]</span></p>
+        <p class="t-out"><span class="t-key">"ingles"</span>: <span class="t-val">"C1 Advanced"</span></p>
+        <br>
+        <p><span class="t-prompt">➜</span> <span class="t-comment">~</span> <span class="t-cmd">ls foco/</span></p>
+        <p class="t-out"><span class="t-arrow">▶</span> Gestão de Produto &amp; Roadmap</p>
+        <p class="t-out"><span class="t-arrow">▶</span> IA Aplicada a Produtos</p>
+        <p class="t-out"><span class="t-arrow">▶</span> Discovery &amp; Métricas de Negócio</p>
+        <br>
+        <p><span class="t-prompt">➜</span> <span class="t-comment">~</span> <span class="t-cursor"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-label">// 01</span>
+    <h2 class="section-title">Jornada Profissional</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- VSOFT -->
+    <div class="timeline-item">
+      <div class="t-date">
+        10/2024 – 02/2026
+        <span class="t-duration">1 ano e 4 meses</span>
+      </div>
+      <div class="t-line"><div class="t-dot"></div><div class="t-track"></div></div>
+      <div class="t-card">
+        <div class="t-card-head" onclick="toggleItem(this)">
+          <div class="t-head-left">
+            <span class="t-role">Product Owner</span>
+            <span class="t-org">Vsoft Tecnologia</span>
+          </div>
+          <button class="t-expand-btn">
+            Detalhes <span class="arrow">▼</span>
+          </button>
+        </div>
+        <p class="t-summary">
+          PO em produto B2B de auditoria e detecção de fraudes no setor público, com uso de IA — do zero até o lançamento do MVP.
+        </p>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <div class="t-results">
+              <div class="t-result">Liderei o produto desde a proposta à diretoria do órgão público até o lançamento do MVP, sendo o elo entre stakeholders técnicos, clientes e gestores públicos.</div>
+              <div class="t-result">Estruturei KPIs e rituais ágeis que aumentaram em 80% a previsibilidade das entregas do time.</div>
+              <div class="t-result">Reduzi desalinhamentos em 50% por meio de discovery contínuo, refinamentos semanais e documentação detalhada de requisitos.</div>
+              <div class="t-result">Implementei e priorizei funcionalidades com modelos LLM e NLP para identificação de inconsistências e prevenção de fraudes em emissão de CNH junto a DETRANs e CFCs.</div>
+              <div class="t-result">Conduzi treinamentos com usuários finais e equipes técnicas, garantindo adoção eficaz do produto.</div>
+            </div>
+            <div class="t-tags">
+              <span class="t-tag">LLM / NLP</span><span class="t-tag">Roadmap</span><span class="t-tag">Backlog</span>
+              <span class="t-tag">Setor Público</span><span class="t-tag">Scrum</span><span class="t-tag">MVP</span><span class="t-tag">GovTech</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEGWARE -->
+    <div class="timeline-item">
+      <div class="t-date">
+        08/2022 – 10/2024
+        <span class="t-duration">2 anos e 2 meses</span>
+      </div>
+      <div class="t-line"><div class="t-dot"></div><div class="t-track"></div></div>
+      <div class="t-card">
+        <div class="t-card-head" onclick="toggleItem(this)">
+          <div class="t-head-left">
+            <span class="t-role">Product Owner</span>
+            <span class="t-org">Segware</span>
+          </div>
+          <button class="t-expand-btn">
+            Detalhes <span class="arrow">▼</span>
+          </button>
+        </div>
+        <p class="t-summary">
+          PO em múltiplos produtos B2B: VMS, plataforma de Analytics/BI e solução GenAI com LLM para o setor de segurança.
+        </p>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <div class="t-results">
+              <div class="t-result">Geri o ciclo completo de três produtos simultaneamente: sistema de videomonitoramento (VMS), plataforma de Analytics/BI e uma solução GenAI com modelo LLM.</div>
+              <div class="t-result">As evoluções da plataforma de BI impactaram mais de 50 clientes, auxiliando na tomada de decisão gerencial com dados em tempo real.</div>
+              <div class="t-result">Reduzi em 35% as atividades manuais dos clientes por meio de automações e relatórios inteligentes baseados em dados.</div>
+              <div class="t-result">Aumentei em 50% a velocidade de entrega do time com foco em impacto de negócio, redução de escopo desnecessário e rituais ágeis bem estruturados.</div>
+              <div class="t-result">Conduzi a priorização e especificação de funcionalidades de IA para detecção de padrões, previsão de alarmes e atendimento automatizado.</div>
+              <div class="t-result">Trabalhei em estreita colaboração com times de design, engenharia e stakeholders comerciais para alinhar roadmap ao crescimento da plataforma.</div>
+            </div>
+            <div class="t-tags">
+              <span class="t-tag">Analytics / BI</span><span class="t-tag">GenAI</span><span class="t-tag">VMS</span>
+              <span class="t-tag">User Stories</span><span class="t-tag">Múltiplos Times</span><span class="t-tag">Power BI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFORGENESES PO -->
+    <div class="timeline-item">
+      <div class="t-date">
+        01/2021 – 02/2022
+        <span class="t-duration">1 ano e 1 mês</span>
+      </div>
+      <div class="t-line"><div class="t-dot"></div><div class="t-track"></div></div>
+      <div class="t-card">
+        <div class="t-card-head" onclick="toggleItem(this)">
+          <div class="t-head-left">
+            <span class="t-role">Product Owner</span>
+            <span class="t-org">Inforgeneses</span>
+          </div>
+          <button class="t-expand-btn">
+            Detalhes <span class="arrow">▼</span>
+          </button>
+        </div>
+        <p class="t-summary">
+          PO em sistema de gestão educacional (B2B e B2C), com foco em qualidade de entrega e proximidade com clientes.
+        </p>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <div class="t-results">
+              <div class="t-result">Assumia a interface direta com clientes e usuários finais para levantamento de requisitos, traduzindo necessidades em User Stories claras e priorizadas.</div>
+              <div class="t-result">Melhorei em 40% a eficiência do ciclo de desenvolvimento por meio de backlog bem estruturado, critérios de aceitação precisos e BDD.</div>
+              <div class="t-result">Reduzi em 70% os desalinhamentos entre times técnicos e clientes atuando como facilitador ativo em reuniões e cerimônias ágeis.</div>
+              <div class="t-result">Diminuí em 60% os incidentes pós-go-live com processos rigorosos de validação, testes funcionais e regressivos antes de cada entrega.</div>
+            </div>
+            <div class="t-tags">
+              <span class="t-tag">Ed-Tech</span><span class="t-tag">BDD</span><span class="t-tag">Testes Funcionais</span>
+              <span class="t-tag">B2B/B2C</span><span class="t-tag">User Stories</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COORD SUPORTE -->
+    <div class="timeline-item">
+      <div class="t-date">
+        2019 – 2021
+        <span class="t-duration">~2 anos</span>
+      </div>
+      <div class="t-line"><div class="t-dot"></div><div class="t-track"></div></div>
+      <div class="t-card">
+        <div class="t-card-head" onclick="toggleItem(this)">
+          <div class="t-head-left">
+            <span class="t-role">Coordenador &amp; Analista de Suporte</span>
+            <span class="t-org">Inforgeneses</span>
+          </div>
+          <button class="t-expand-btn">
+            Detalhes <span class="arrow">▼</span>
+          </button>
+        </div>
+        <p class="t-summary">
+          Liderança da equipe de suporte, atendimento ao cliente e gestão de chamados em ambiente de alta demanda.
+        </p>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <div class="t-results">
+              <div class="t-result">Coordenei equipe de suporte técnico, gerenciando atendimentos, SLAs e escalações para times de desenvolvimento.</div>
+              <div class="t-result">Conduzi treinamentos internos e com clientes para adoção de novas funcionalidades do sistema acadêmico.</div>
+              <div class="t-result">Atuei como Analista de Suporte por mais de 2 anos antes de assumir a coordenação, desenvolvendo visão profunda das dores dos usuários — base para a transição ao papel de PO.</div>
+            </div>
+            <div class="t-tags">
+              <span class="t-tag">Suporte Técnico</span><span class="t-tag">Liderança</span><span class="t-tag">Treinamentos</span><span class="t-tag">SLA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEV AUTÔNOMO -->
+    <div class="timeline-item">
+      <div class="t-date">
+        2017 – 2019
+        <span class="t-duration">~2 anos</span>
+      </div>
+      <div class="t-line"><div class="t-dot"></div><div class="t-track"></div></div>
+      <div class="t-card">
+        <div class="t-card-head" onclick="toggleItem(this)">
+          <div class="t-head-left">
+            <span class="t-role">Desenvolvedor Autônomo</span>
+            <span class="t-org">Projetos Próprios — Freelance</span>
+          </div>
+          <button class="t-expand-btn">
+            Detalhes <span class="arrow">▼</span>
+          </button>
+        </div>
+        <p class="t-summary">
+          Desenvolvimento de sites, landing pages e chatbots para clientes locais, com foco em pequenas e médias empresas.
+        </p>
+        <div class="t-details">
+          <div class="t-details-inner">
+            <div class="t-results">
+              <div class="t-result">Desenvolveu e entregou projetos de websites e landing pages para clientes de variados segmentos (varejo, saúde, educação).</div>
+              <div class="t-result">Criou chatbots de atendimento automatizado integrados a canais como WhatsApp, reduzindo demanda operacional dos clientes.</div>
+              <div class="t-result">Experiência de gestão direta com clientes finais — base da habilidade de comunicação e levantamento de requisitos aplicada na carreira como PO.</div>
+            </div>
+            <div class="t-tags">
+              <span class="t-tag">Web Dev</span><span class="t-tag">Chatbots</span><span class="t-tag">WhatsApp API</span><span class="t-tag">Freelance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRADUAÇÃO -->
+    <div class="timeline-item">
+      <div class="t-date">
+        08/2021 – 07/2024
+      </div>
+      <div class="t-line"><div class="t-dot"></div><div class="t-track"></div></div>
+      <div class="t-card">
+        <div class="t-card-head" style="cursor:default">
+          <div class="t-head-left">
+            <span class="t-role">Tecnólogo em Gestão de TI</span>
+            <span class="t-org">Faculdade ISL Wyden</span>
+          </div>
+        </div>
+        <p class="t-summary">Graduação com foco em gestão de tecnologia da informação, processos e projetos digitais.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-label">// 02</span>
+    <h2 class="section-title">Habilidades</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <p class="skill-card-title">Hard Skills</p>
+      <div class="skill-list">
+        <div class="skill-item">Gestão de produto e ciclo de vida completo</div>
+        <div class="skill-item">Definição de roadmap e priorização de backlog</div>
+        <div class="skill-item">User Stories e critérios de aceitação (BDD)</div>
+        <div class="skill-item">Métricas, KPIs, GTM e análise de dados (SQL)</div>
+        <div class="skill-item">Prompt Engineering e IA aplicada a produto</div>
+        <div class="skill-item">Testes funcionais, regressivos e validação de entregas</div>
+        <div class="skill-item">Documentação técnica e de produto</div>
+      </div>
+    </div>
+    <div class="skill-card">
+      <p class="skill-card-title">Soft Skills</p>
+      <div class="skill-list">
+        <div class="skill-item">Liderança de times multidisciplinares</div>
+        <div class="skill-item">Alinhamento entre stakeholders técnicos e de negócio</div>
+        <div class="skill-item">Comunicação eficaz e apresentações executivas</div>
+        <div class="skill-item">Facilitação de ritos ágeis (Scrum)</div>
+        <div class="skill-item">Resolução de problemas e conflitos</div>
+        <div class="skill-item">Condução de treinamentos e mentorias</div>
+        <div class="skill-item">Adaptabilidade e melhoria contínua</div>
+      </div>
+    </div>
+    <div class="skill-card">
+      <p class="skill-card-title">Ferramentas</p>
+      <div class="tools-grid">
+        <span class="tool-badge">Jira</span>
+        <span class="tool-badge">Trello</span>
+        <span class="tool-badge">Confluence</span>
+        <span class="tool-badge">Notion</span>
+        <span class="tool-badge">Azure DevOps</span>
+        <span class="tool-badge">Google Workspace</span>
+        <span class="tool-badge">Power BI</span>
+        <span class="tool-badge">SQL</span>
+        <span class="tool-badge">Claude</span>
+        <span class="tool-badge">ChatGPT</span>
+        <span class="tool-badge">Gemini</span>
+      </div>
+      <br>
+      <p class="skill-card-title" style="margin-top:8px">Idiomas</p>
+      <div class="skill-list">
+        <div class="skill-item">Inglês — C1 Advanced</div>
+        <div class="skill-item">Português — Nativo</div>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+  <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--blue);margin-bottom:16px">Certificações</p>
+  <div class="certs-grid">
+    <div class="cert-card"><p class="cert-name">Business Analysis &amp; Process Management</p><p class="cert-issuer">Coursera</p></div>
+    <div class="cert-card"><p class="cert-name">Scrum Foundation Professional Certificate (SFPC)</p><p class="cert-issuer">Certiprof</p></div>
+    <div class="cert-card"><p class="cert-name">Começar um Projeto bem Sucedido</p><p class="cert-issuer">Google</p></div>
+    <div class="cert-card"><p class="cert-name">Gerenciamento de Projetos</p><p class="cert-issuer">Google</p></div>
+    <div class="cert-card"><p class="cert-name">Liderança e Gestão de Pessoas</p><p class="cert-issuer">Fast MBA</p></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PRODUCTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-label">// 03</span>
+    <h2 class="section-title">Produtos em Destaque</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <span class="project-type">B2B · Setor Público · IA</span>
+      <p class="project-company">Vsoft Tecnologia</p>
+      <p class="project-name">Plataforma de Auditoria de CNH</p>
+      <p class="project-desc">Sistema de auditoria para detecção de fraudes em emissão de CNH junto a DETRANs e CFCs. Do zero ao MVP, com modelos LLM e NLP para identificar inconsistências e padrões suspeitos nos dados.</p>
+      <p class="project-metric">↑ 80% previsibilidade · ↓ 50% desalinhamentos</p>
+      <div class="project-stack">
+        <span class="p-tag">LLM</span><span class="p-tag">NLP</span><span class="p-tag">GovTech</span><span class="p-tag">MVP</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-type">B2B · Analytics · GenAI</span>
+      <p class="project-company">Segware</p>
+      <p class="project-name">Suite Analytics, BI &amp; GenAI</p>
+      <p class="project-desc">VMS, dashboards de Analytics/BI para decisões gerenciais e solução GenAI com LLM para detecção de padrões, previsão de alarmes e atendimento automático no setor de segurança.</p>
+      <p class="project-metric">50+ clientes impactados · ↓ 35% atividades manuais</p>
+      <div class="project-stack">
+        <span class="p-tag">Power BI</span><span class="p-tag">GenAI</span><span class="p-tag">VMS</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-type">B2B · B2C · Ed-Tech</span>
+      <p class="project-company">Inforgeneses</p>
+      <p class="project-name">Sistema de Gestão Acadêmica</p>
+      <p class="project-desc">Sistema acadêmico, administrativo e financeiro para instituições de ensino. Foco em qualidade de entrega, validação rigorosa e proximidade com usuários para eliminar incidentes.</p>
+      <p class="project-metric">↓ 60% incidentes pós-go-live · ↓ 70% desalinhamentos</p>
+      <div class="project-stack">
+        <span class="p-tag">Ed-Tech</span><span class="p-tag">BDD</span><span class="p-tag">B2B/B2C</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <span class="section-label">// 04</span>
+    <h2 class="section-title">Contato</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p class="contact-line">
+        Aberto a novas oportunidades como Product Owner ou Product Manager.<br>
+        Vamos conversar sobre produto, dados e impacto real.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:fabio981962058@gmail.com" class="contact-link"><span>✉</span> fabio981962058@gmail.com</a>
+        <a href="https://linkedin.com/in/f4bio-oliveira/" target="_blank" class="contact-link"><span>in</span> linkedin.com/in/f4bio-oliveira</a>
+        <a href="tel:+5598996136276" class="contact-link"><span>☎</span> (98) 99613-6276</a>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label class="form-label" for="name">Nome</label>
+        <input class="form-input" id="name" type="text" placeholder="Seu nome" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <input class="form-input" id="email" type="email" placeholder="seu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="msg">Mensagem</label>
+        <textarea class="form-textarea" id="msg" placeholder="Sua mensagem..." required></textarea>
+      </div>
+      <button class="form-submit" type="submit" id="submit-btn">Enviar Mensagem →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Fábio Oliveira da Costa Filho · São Luís, MA</span>
+  <span><a href="#hero">↑ Voltar ao topo</a></span>
+</footer>
+
+<script>
+  function toggleItem(head) {
+    const card = head.closest('.t-card');
+    const details = card.querySelector('.t-details');
+    const btn = card.querySelector('.t-expand-btn');
+    if (!details) return;
+    const isOpen = details.classList.contains('open');
+    details.classList.toggle('open', !isOpen);
+    if (btn) {
+      btn.classList.toggle('open', !isOpen);
+      btn.childNodes[0].textContent = isOpen ? 'Detalhes ' : 'Fechar ';
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.07 });
+
+  document.querySelectorAll('.t-card, .project-card, .skill-card, .cert-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = '✓ Mensagem enviada!';
+    btn.style.background = 'var(--cyan)';
+    setTimeout(() => {
+      btn.textContent = 'Enviar Mensagem →';
+      btn.style.background = 'var(--blue)';
+      e.target.reset();
+    }, 3000);
+  }
+
+  document.querySelectorAll('.terminal-body p').forEach((line, i) => {
+    line.style.opacity = '0';
+    setTimeout(() => { line.style.transition = 'opacity 0.3s'; line.style.opacity = '1'; }, i * 130 + 500);
+  });
+</script>
+</body>
+</html>
